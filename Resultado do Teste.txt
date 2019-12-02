@@ -1,0 +1,83 @@
+Qual o objetivo do comando cache em Spark?
+Persiste todos os dados em memória (MEMORY_ONLY).
+
+O mesmo código implementado em Spark é normalmente mais rápido que a implementação equivalente em MapReduce. Por quê?
+É mais rapido por conta do processamento, pois o Spark pode fazer isso na memória, enquanto o MapReduce precisa ler e gravar em um disco.
+
+Qual é a função do SparkContext?
+É o que conecta o Spark ao programa que está sendo desenvolvido.
+Ele pode ser acessado como uma variável em um programa para utilizar os seus recursos.
+
+Explique com suas palavras  o que é Resilient Distributed Datasets (RDD)?
+É uma estrutura de dados fundamental do Spark. E uma coleção distribuída imutável de objetos. Cada conjunto de dados no RDD é dividido em partições lógicas, que podem ser calculadas em nós diferentes do cluster.
+
+GroupByKey é menos eficiente que reduceByKey em grandes dataset. Por quê?   
+O GroupByKey quando utilizado, os dados são embaralhados e nessa transformação, muitos dados desnecessários são transferidos pela rede e o ReduceByKey antes de embaralhar os dados, os pares na mesma máquina com a mesma chave são combinados, com isso se torna mais eficiente.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Resposta:
+Explique o que o código Scala abaixo faz:
+
+val textFile = sc.textFile("hdfs://..."): Lê um arquivo texto dentro do HDFS e grava dentro de uma variável textFile.
+
+val counts = textFile.flatMap(line => line.split(" "))
+
+	.map(word => (word, 1))
+
+	.reduceByKey(_ + _): Ele  vai splitar por vazio e após o Split vai fazer a soma de cada palavra e jogar dentro da variável counts.
+
+counts.saveAsTextFile("hdfs://..."): Vai salver o resultado do counts dentro do HDFS.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Respostas do Código
+
+1. Número de hosts únicos.
+
++-----------+                                                          
+|count(host)|
++-----------+
+|    137979|
++-----------+
+
+
+2. O total de erros 404.
+
+>>> df.where("http = '404'").count()
+20700 
+
+3. Os 5 URLs que mais causaram erro 404.
+
+>>> df.where("http = '404'").groupby('http', 'host').count().orderBy(desc('count')).show(5, False)
++----+---------------------------+-----+                                      
+|http|host                      |count|
++----+---------------------------+-----+
+|404 |hoohoo.ncsa.uiuc.edu      |251  |
+|404 |piweba3y.prodigy.com      |157  |
+|404 |jbiagioni.npt.nuwc.navy.mil|132 |
+|404 |piweba1y.prodigy.com      |114  |
+|404 |www-d4.proxy.aol.com      |91   |
++----+---------------------------+-----+
+
+4. Quantidade de erros 404 por dia.
+
+>>> df2 = df.withColumn('data_formatada', substring(col("data"), 1, 11))
+>>> df2.where("http = '404'").groupby('data_formatada').count().orderBy(desc('count')).show(5, False)
++--------------------------+-----+                                             
+|data                      |count|
++--------------------------+-----+
+|11/Aug/1995:12:05:59 -0400|7    |
+|28/Aug/1995:11:56:35 -0400|7    |
+|12/Jul/1995:10:35:09 -0400|5    |
+|17/Aug/1995:16:55:00 -0400|5    |
+|28/Aug/1995:17:14:42 -0400|5    |
++--------------------------+-----+
+only showing top 5 rows
+
+
+5. O total de bytes retornados.
+
+>>> df.select('bytes').count()
+3461613
+
