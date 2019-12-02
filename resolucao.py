@@ -33,14 +33,14 @@ if __name__ == "__main__":
     df.agg(countDistinct('host')).show()
     
     #Resposta 2
-    print(df.where("http = '404'").count())
+    print(df.where("http == '404'").count())
 
     #Resposta 3
-    df.where("http = '404'").groupby('http', 'host').count().orderBy(desc('count')).show(5, False)
+    df.where("http == '404'").groupby('http', 'host').count().orderBy(desc('count')).show(5, False)
     
     #Resposta 4
     df2 = df.withColumn('data_formatada', substring(col("data"), 1, 11))
-    df2.where("http = '404'").groupby('data_formatada').count().orderBy(desc('count')).show(5, False)    
+    df2.where("http == '404'").groupby('data_formatada').count().orderBy(desc('count')).show(5, False)    
 
     #Resposta 5
     print(df.select('bytes').count())
