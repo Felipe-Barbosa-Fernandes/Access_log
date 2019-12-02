@@ -64,16 +64,17 @@ Respostas do Código
 
 >>> df2 = df.withColumn('data_formatada', substring(col("data"), 1, 11))
 >>> df2.where("http = '404'").groupby('data_formatada').count().orderBy(desc('count')).show(5, False)
-+--------------------------+-----+                                             
-|data                      |count|
-+--------------------------+-----+
-|11/Aug/1995:12:05:59 -0400|7    |
-|28/Aug/1995:11:56:35 -0400|7    |
-|12/Jul/1995:10:35:09 -0400|5    |
-|17/Aug/1995:16:55:00 -0400|5    |
-|28/Aug/1995:17:14:42 -0400|5    |
-+--------------------------+-----+
++--------------+-----+
+|data_formatada|count|
++--------------+-----+
+|19/Jul/1995  |636  |
+|06/Jul/1995  |633  |
+|07/Jul/1995  |568  |
+|30/Aug/1995  |568  |
+|13/Jul/1995  |531  |
++--------------+-----+
 only showing top 5 rows
+
 
 
 5. O total de bytes retornados.
